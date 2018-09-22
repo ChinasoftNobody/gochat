@@ -1,3 +1,4 @@
+//这只是一个文档信息库
 package main
 
 import "github.com/ChinasoftNobody/gochat/server/serv"
