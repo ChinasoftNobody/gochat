@@ -3,56 +3,36 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/ChinasoftNobody/gochat/client/chat"
 	"github.com/ChinasoftNobody/gochat/client/common"
 	"github.com/ChinasoftNobody/gochat/client/dto"
-	"github.com/lxn/walk"
 	"net"
-	. "github.com/lxn/walk/declarative"
-	"strings"
 )
-
-
 
 /**
 客户端
 */
 func main() {
-	//启动聊天客户端
-	//conn, _ := chat.StartGoChat("localhost:8000")
-	//defer conn.Close()
-	//go sendMessage(conn)
-	//for {
-	//	buf := make([]byte, 1024)
-	//	n, err := conn.Read(buf)
-	//	if err != nil {
-	//		fmt.Println("读取数据失败:", err)
-	//		return
-	//	}
-	//	fmt.Printf("接收数据：[%s]\n", string(buf[:n]))
-	//}
+	//连接至服务器
+	ConnectToServer()
+}
 
-	var inTE, outTE *walk.TextEdit
-
-	MainWindow{
-		Title:   "SCREAMO",
-		MinSize: Size{600, 400},
-		MaxSize:Size{600,400},
-		Layout:  VBox{},
-		Children: []Widget{
-			HSplitter{
-				Children: []Widget{
-					TextEdit{AssignTo: &inTE},
-					TextEdit{AssignTo: &outTE, ReadOnly: true},
-				},
-			},
-			PushButton{
-				Text: "SCREAM",
-				OnClicked: func() {
-					outTE.SetText(strings.ToUpper(inTE.Text()))
-				},
-			},
-		},
-	}.Run()
+/**
+连接至服务器
+*/
+func ConnectToServer() {
+	conn, _ := chat.StartGoChat("localhost:8000")
+	defer conn.Close()
+	go sendMessage(conn)
+	for {
+		buf := make([]byte, 1024)
+		n, err := conn.Read(buf)
+		if err != nil {
+			fmt.Println("读取数据失败:", err)
+			return
+		}
+		fmt.Printf("接收数据：[%s]\n", string(buf[:n]))
+	}
 }
 
 /**
