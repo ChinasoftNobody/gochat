@@ -6,6 +6,7 @@ import (
 	"github.com/ChinasoftNobody/gochat/client/chat"
 	"github.com/ChinasoftNobody/gochat/client/common"
 	"github.com/ChinasoftNobody/gochat/client/dto"
+	"github.com/ChinasoftNobody/gochat/client/widgets"
 	"net"
 )
 
@@ -14,16 +15,26 @@ import (
 */
 func main() {
 	//连接至服务器
-	ConnectToServer()
+	//connectToServer()
+	//启动界面客户端
+	chatWindow := widgets.SingleWindow()
+	chatWindow.RunChart()
 }
 
 /**
 连接至服务器
 */
-func ConnectToServer() {
+func connectToServer() {
 	conn, _ := chat.StartGoChat("localhost:8000")
-	defer conn.Close()
+	//defer conn.Close()
 	go sendMessage(conn)
+	go readMessage(conn)
+}
+
+/**
+接收信息并打印数据
+*/
+func readMessage(conn net.Conn) {
 	for {
 		buf := make([]byte, 1024)
 		n, err := conn.Read(buf)
@@ -49,7 +60,7 @@ func sendMessage(conn net.Conn) {
 		tmp := string(ipt[:])
 		fmt.Println("输入数据：", tmp)
 		//封装msg
-		msg := dto.CommonMsg{Type: common.MSG_TYPE_STRING, Content: tmp}
+		msg := dto.CommonMsg{Type: common.MsgTypeString, Content: tmp}
 		msgBytes := make([]byte, 10240)
 		msgBytes, err = json.Marshal(msg)
 		if err != nil {
