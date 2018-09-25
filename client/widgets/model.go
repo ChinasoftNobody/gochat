@@ -11,30 +11,20 @@ package widgets
 /**
 定义模型需要实现的接口
 */
-type Model interface {
+type ActionRegister interface {
 	RegisterAction()
-	BindData([]byte)
 }
 
 /**
 定义基本模型类型
 实现基本的事件注册
 */
-type SimpleModel struct {
-	//数据信息
-	Data interface{}
+type SimpleWidget struct {
 }
 
 /**
 这里实现基本的时间注册方法
 */
-func (tmp SimpleModel) RegisterAction() {
+func (tmp SimpleWidget) RegisterAction() {
 	//这里不做任何业务处理，只是实现了当前方法
-}
-
-/**
-基本赋值
-*/
-func (tmp SimpleModel) BindData(data []byte) {
-	tmp.Data = data
 }

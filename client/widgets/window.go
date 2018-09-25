@@ -1,6 +1,7 @@
 package widgets
 
 import (
+	"github.com/ChinasoftNobody/gochat/client/dto"
 	"github.com/lxn/walk"
 	. "github.com/lxn/walk/declarative"
 	"sync"
@@ -9,16 +10,6 @@ import (
 const WindowWidth = 300
 const WindowHeight = 600
 const WindowTitle = "GoChat"
-
-/**
-查询用户的输入框
-*/
-var searchLineEdit *walk.LineEdit
-
-/**
-用户列表框
-*/
-var userListBox *walk.ListBox
 
 /**
 主window
@@ -34,9 +25,9 @@ var mainWindowLock sync.Once
 主界面窗口类型
 */
 type ChatMainWindow struct {
-	MainWindow      *MainWindow
-	SearchUserModel *SearchUserModel
-	UserListModel   *UserListModel
+	MainWindow       *MainWindow
+	SearchUserWidget *SearchUserWidget
+	UserListWidget   *UserListWidget
 }
 
 /**
@@ -61,31 +52,31 @@ func SingleWindow() *ChatMainWindow {
 */
 func initChatMainWindow() {
 
-	contactWidget := &UserListModel{
+	chatMainWindow = &ChatMainWindow{}
+	var searchLineEdit *walk.LineEdit
+	var userListBox *walk.ListBox
+	var model dto.IUserModel = &dto.UserModel{Items: []dto.UserInfo{}}
+	chatMainWindow.UserListWidget = &UserListWidget{
 		ListBox: ListBox{
 			AssignTo: &userListBox,
+			Model:    model,
 		},
 	}
-
-	contactWidget.RegisterAction()
-	lineEdit := &SearchUserModel{}
-	lineEdit.AssignTo = &searchLineEdit
-	lineEdit.RegisterAction()
-	mainWindow := &MainWindow{
+	chatMainWindow.SearchUserWidget = &SearchUserWidget{
+		LineEdit: LineEdit{AssignTo: &searchLineEdit},
+	}
+	chatMainWindow.SearchUserWidget.RegisterAction()
+	chatMainWindow.UserListWidget.RegisterAction()
+	chatMainWindow.MainWindow = &MainWindow{
 		Title:   WindowTitle,
 		Size:    Size{Width: WindowWidth, Height: WindowHeight},
 		Layout:  VBox{},
 		Enabled: true,
 		Children: []Widget{
-			lineEdit,
-			contactWidget,
+			*chatMainWindow.SearchUserWidget,
+			*chatMainWindow.UserListWidget,
 		},
 	}
 
-	chatMainWindow = &ChatMainWindow{
-		mainWindow,
-		lineEdit,
-		contactWidget,
-	}
 	return
 }

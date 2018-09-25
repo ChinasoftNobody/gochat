@@ -1,29 +1,29 @@
 package widgets
 
 import (
-	"encoding/json"
+	"fmt"
 	"github.com/ChinasoftNobody/gochat/client/dto"
 	"github.com/lxn/walk/declarative"
 )
 
-type SearchUserModel struct {
+type SearchUserWidget struct {
 	declarative.LineEdit
-	SimpleModel
+	SimpleWidget
 }
 
 /**
-实现model接口
+这里实现基本的事件注册方法
 */
-func (model *SearchUserModel) RegisterAction() {
-	model.OnTextChanged = func() {
-		keyword := (*model.AssignTo).Text()
-		fileUserList := make([]dto.UserInfo, 0)
-		for _, user := range *SingleWindow().UserListModel.Data {
-			if user.ContainName(keyword) {
-				fileUserList = append(fileUserList, user)
-			}
+func (tmp *SearchUserWidget) RegisterAction() {
+	tmp.OnTextChanged = func() {
+		keyword := (*tmp.AssignTo).Text()
+		fmt.Println(keyword)
+		var model = (*SingleWindow().UserListWidget.AssignTo).Model()
+		value, ok := model.(dto.IUserModel)
+		if ok {
+			value.Data().Items = append(value.Data().Items, dto.UserInfo{Name: keyword})
+			(*SingleWindow().UserListWidget.AssignTo).SetModel(value)
 		}
-		data, _ := json.Marshal(fileUserList)
-		SingleWindow().UserListModel.BindData(data)
+
 	}
 }
