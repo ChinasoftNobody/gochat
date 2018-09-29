@@ -3,6 +3,7 @@ package serv
 import (
 	"fmt"
 	"github.com/ChinasoftNobody/gochat/server/common"
+	"github.com/ChinasoftNobody/gochat/server/service"
 	"net"
 )
 
@@ -36,5 +37,6 @@ func newClient(conn net.Conn) {
 		fmt.Println("调用新的连接失败")
 		return
 	}
-	fmt.Printf("新的客户端连接[%s]\n", conn.RemoteAddr().String())
+	service.NewClientConnect(conn)
+
 }

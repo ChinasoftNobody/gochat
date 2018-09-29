@@ -15,7 +15,7 @@ import (
 */
 func main() {
 	//连接至服务器
-	//connectToServer()
+	connectToServer()
 	//启动界面客户端
 	chatWindow := widgets.SingleWindow()
 	chatWindow.RunChart()
