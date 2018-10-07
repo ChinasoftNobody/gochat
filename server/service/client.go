@@ -25,4 +25,5 @@ func NewClientConnect(conn net.Conn) {
 	clientConnect := dto.ClientConnectDto{RemoteAddr: conn.RemoteAddr().String(), LocalAddr: conn.LocalAddr().String(),
 		ConnectTime: time.Now()}
 	db.DB.Create(&clientConnect)
+	fmt.Println(clientConnect.ID)
 }
