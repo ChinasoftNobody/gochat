@@ -1,15 +1,11 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/ChinasoftNobody/gochat/client/chat"
-	"github.com/ChinasoftNobody/gochat/client/common"
 	"github.com/ChinasoftNobody/gochat/client/config"
-	"github.com/ChinasoftNobody/gochat/client/dto"
 	"github.com/ChinasoftNobody/gochat/client/widgets"
+	"github.com/ChinasoftNobody/gochat/common/message"
 	"github.com/wonderivan/logger"
-	"log"
 	"net"
 )
 
@@ -34,7 +30,7 @@ func connectToServer() {
 	if !ok {
 		return
 	}
-	go sendMessage(conn)
+	go sendMessageTest(conn)
 	go readMessage(conn)
 }
 
@@ -43,44 +39,19 @@ func connectToServer() {
 */
 func readMessage(conn net.Conn) {
 	for {
-		buf := make([]byte, 1024)
-		n, err := conn.Read(buf)
+		meta, err := message.ReceiveMessage(conn)
 		if err != nil {
-			logger.Error("读取数据失败:", err)
 			return
 		}
-		logger.Info("接收数据：[%s]\n", string(buf[:n]))
+		logger.Info("新的消息:", meta.Content)
 	}
 }
 
 /**
 从客户端输入器接收数据，并且封装信息发送个服务器
 */
-func sendMessage(conn net.Conn) {
-	for {
-		var ipt = make([]byte, 1024)
-		_, err := fmt.Scan(&ipt)
-		if err != nil {
-			logger.Error("接收系统输入数据失败", err)
-			continue
-		}
-		tmp := string(ipt[:])
-		log.Println("输入数据：", tmp)
-		//封装msg
-		msg := dto.CommonMsg{Type: common.MsgTypeString, Content: tmp}
-		msgBytes := make([]byte, 10240)
-		msgBytes, err = json.Marshal(msg)
-		if err != nil {
-			logger.Error("json转化消息失败")
-			continue
-		}
-		_, err1 := conn.Write(msgBytes)
-		if err1 != nil {
-			logger.Error("发送数据失败")
-			continue
-		}
-
-	}
+func sendMessageTest(conn net.Conn) {
+	message.SendMessage(conn, "Hello server")
 }
 
 //初始化配置信息

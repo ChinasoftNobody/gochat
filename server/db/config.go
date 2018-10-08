@@ -4,11 +4,11 @@
 package db
 
 import (
-	"fmt"
 	"github.com/ChinasoftNobody/gochat/server/common"
 	"github.com/ChinasoftNobody/gochat/server/dto"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/wonderivan/logger"
 )
 
 var DB *gorm.DB
@@ -34,7 +34,7 @@ func init() {
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
 		return "t_" + defaultTableName
 	}
-	fmt.Println("gorm初始化成功")
+	logger.Info("gorm初始化成功")
 	createTable()
 }
 

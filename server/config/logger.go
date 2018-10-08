@@ -15,21 +15,21 @@ import (
 //初始化日志配置
 func InitLog() {
 	logger.SetLogger(`{
-	"TimeFormat":"2006-01-02 15:04:05",
-		"Console": {
-		"level": "TRAC",
-			"color": true
-	},
-	"File": {
-		"filename": "app.log",
-			"level": "TRAC",
-			"daily": true,
-			"maxlines": 1000000,
-			"maxsize": 1,
-			"maxdays": -1,
-			"append": true,
-			"permit": "0660"
-	}
+  "TimeFormat":"2006-01-02 15:04:05",
+  "Console": {
+    "level": "TRAC",
+    "color": true
+  },
+  "File": {
+    "filename": "serv.log",
+    "level": "TRAC",
+    "daily": true,
+    "maxlines": 1000000,
+    "maxsize": 1,
+    "maxdays": -1,
+    "append": true,
+    "permit": "0660"
+  }
 }`)
 	logger.Debug("日志初始化")
 }

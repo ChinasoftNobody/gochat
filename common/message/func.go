@@ -21,7 +21,7 @@ func SendMessage(conn net.Conn, content interface{}) bool {
 	}
 	meta := Meta{Type: TypeSendMessage, Content: content, Source: conn.LocalAddr().String(), SendTime: time.Now()}
 	bytes, err := json.Marshal(meta)
-	if len(bytes) > 1024*1024*5 {
+	if len(bytes) > Size {
 		logger.Error("message too long, can not send message larger than 5M")
 	}
 	if err != nil {
@@ -40,13 +40,18 @@ func SendMessage(conn net.Conn, content interface{}) bool {
 /**
 接收消息
 */
-func ReceiveMessage(bytes []byte) (content interface{}, err error) {
-	meta := Meta{}
-	err = json.Unmarshal(bytes, &meta)
+func ReceiveMessage(conn net.Conn) (meta Meta, err error) {
+	byteBuff := make([]byte, Size)
+	n, err := conn.Read(byteBuff)
+	if err != nil {
+		logger.Error("接收数据失败,断开客户端连接", err)
+		return
+	}
+	meta = Meta{}
+	err = json.Unmarshal(byteBuff[:n], &meta)
 	if err != nil {
 		logger.Error(err)
 		return
 	}
-	content = meta.Content
 	return
 }
