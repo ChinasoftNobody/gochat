@@ -2,6 +2,7 @@
 package main
 
 import (
+	"github.com/ChinasoftNobody/gochat/common/kafka"
 	"github.com/ChinasoftNobody/gochat/server/config"
 	"github.com/ChinasoftNobody/gochat/server/serv"
 )
@@ -17,4 +18,6 @@ func main() {
 
 func init() {
 	config.InitLog()
+	kafka.Test()
+
 }
