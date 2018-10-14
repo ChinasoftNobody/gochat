@@ -1,5 +1,0 @@
-/**
-ui package
-
-*/
-package widgets

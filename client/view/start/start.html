@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="view/bootstrap.min.css">
+    <link rel="stylesheet" href="view/start/start.css">
+</head>
+<body>
+<div>
+    <input id="iptSearch" type="text" class="form-control app-search" value="">
+</div>
+<div role="separator" class="divider"></div>
+<div class="communicate-content">
+    <ul id="ulCommunications" class="list-group">
+        <li id="test" class="list-group-item">Cras justo odio</li>
+    </ul>
+
+</div>
+<script type="text/tiscript">
+
+    self.ready = function(){
+
+        $(#iptSearch).on("change",function(){
+            view.change($(#iptSearch).value)
+        })
+
+    }
+</script>
+</body>
+</html>

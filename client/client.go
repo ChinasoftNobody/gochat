@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/ChinasoftNobody/gochat/client/chat"
 	"github.com/ChinasoftNobody/gochat/client/config"
-	"github.com/ChinasoftNobody/gochat/client/widgets"
+	"github.com/ChinasoftNobody/gochat/client/view/start"
 	"github.com/ChinasoftNobody/gochat/common/message"
 	"github.com/wonderivan/logger"
 	"net"
@@ -16,8 +16,8 @@ func main() {
 	//连接至服务器
 	connectToServer()
 	//启动界面客户端
-	chatWindow := widgets.SingleWindow()
-	chatWindow.RunChart()
+
+	start.MainWindow()
 
 }
 
